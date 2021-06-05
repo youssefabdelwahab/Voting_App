@@ -159,10 +159,13 @@ contract Voting {
      * @return uint
      */
     function winnerCandidate() onlyOwner public view returns (uint) {
+        require(!isOpen);
         uint winner = 0;  //TODO 
+        uint maxAmountVote = 0;
         for(uint i=0;i < candidateVotes.length;i++){
             if(candidateVotes[i] > candidateVotes[winner]){
                 winner = i;
+                maxAmountVote = candidateVotes[i];
             }
         }
         return winner;

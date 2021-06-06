@@ -5,7 +5,10 @@ contract Voting {
     string symbol = 'VOTE';
     bool public isOpen;
     address payable owner = msg.sender;
-  
+    
+    event Bought(address from, address to , uint amt);
+    event Voted(Candidates choice , address voter);
+    event HasBeenRegistered(address voter, string firstname , string lastname , uint age);
     /**
      * @dev Define Token Price (a criteria used in qualifying voters)
     */
@@ -111,6 +114,7 @@ contract Voting {
         /**
          * @dev Minimum 5 ETH to purchase 5 tokens
         */
+        emit HasBeenRegistered(_voter , _fName , _lName , _age);
         // require(voters[_voter].tokens >= minTokenForVoting, "Get out");
         require(voters[_voter].age >=18, "You're a young grasshopper");
         /**
@@ -124,7 +128,7 @@ contract Voting {
      * function for the Voters to buy tokens
      * @return uint
      */
-    function buy(uint256 amt , address _voter) payable public returns(uint){
+    function buy(address _voter, uint256 amt ) payable public returns(uint){
         // Voter storage voter = voters[msg.sender];
         uint tokensToBuy = amt/tokenPrice;
         require(tokensToBuy == 1, 'You can only buy 1');
@@ -132,6 +136,7 @@ contract Voting {
         voters[_voter].tokens = tokensToBuy;
         balances[msg.sender] -= tokensToBuy;
         balances[_voter] += tokensToBuy;
+        emit Bought(msg.sender , _voter , amt);
         return tokensToBuy;
     }
     function balance() onlyOwner public view returns(uint) { 
@@ -149,6 +154,7 @@ contract Voting {
         uint prevCount = candidateVotes[uint8(_candidate)];
         candidateVotes[uint8(_candidate)] = prevCount + 1 ;
         //Set the status of the voter back to Unverified
+        emit Voted(_candidate , _voter);
         voters[_voter].status = VoterStatus.unverified;
     }
     function CloseVoting () onlyOwner public {
@@ -160,18 +166,14 @@ contract Voting {
      * @return uint
      */
     function winnerCandidate() onlyOwner public view returns (uint) {
-        require(!isOpen);
         uint winner = 0;  //TODO 
-        uint maxAmountVote = 0;
         for(uint i=0;i < candidateVotes.length;i++){
             if(candidateVotes[i] > candidateVotes[winner]){
                 winner = i;
-                maxAmountVote = candidateVotes[i];
             }
         }
         return winner;
     }
-<<<<<<< HEAD
     
     function showCandidatevotes() onlyOwner public view returns (uint [] memory) { 
         uint [] memory list = new uint [] (candidateVotes.length);
@@ -185,6 +187,3 @@ contract Voting {
         return list;
     }
 }
-=======
-}
->>>>>>> f7aedf0ec8815441845ef1aeca6e864538733ed1

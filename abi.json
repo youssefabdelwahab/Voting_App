@@ -27,28 +27,29 @@
             "type": "constructor"
         },
         {
-            "constant": false,
-            "inputs": [],
-            "name": "CloseVoting",
-            "outputs": [],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "constant": true,
-            "inputs": [],
-            "name": "balance",
-            "outputs": [
+            "anonymous": false,
+            "inputs": [
                 {
+                    "indexed": false,
+                    "internalType": "address",
+                    "name": "from",
+                    "type": "address"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "address",
+                    "name": "to",
+                    "type": "address"
+                },
+                {
+                    "indexed": false,
                     "internalType": "uint256",
-                    "name": "",
+                    "name": "amt",
                     "type": "uint256"
                 }
             ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
+            "name": "Bought",
+            "type": "event"
         },
         {
             "constant": false,
@@ -77,19 +78,44 @@
             "type": "function"
         },
         {
-            "constant": true,
+            "constant": false,
             "inputs": [],
-            "name": "isOpen",
-            "outputs": [
+            "name": "CloseVoting",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
                 {
-                    "internalType": "bool",
-                    "name": "",
-                    "type": "bool"
+                    "indexed": false,
+                    "internalType": "address",
+                    "name": "voter",
+                    "type": "address"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "string",
+                    "name": "firstname",
+                    "type": "string"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "string",
+                    "name": "lastname",
+                    "type": "string"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "uint256",
+                    "name": "age",
+                    "type": "uint256"
                 }
             ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
+            "name": "HasBeenRegistered",
+            "type": "event"
         },
         {
             "constant": false,
@@ -142,21 +168,6 @@
             "type": "function"
         },
         {
-            "constant": true,
-            "inputs": [],
-            "name": "showCandidatevotes",
-            "outputs": [
-                {
-                    "internalType": "uint256[]",
-                    "name": "",
-                    "type": "uint256[]"
-                }
-            ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
             "constant": false,
             "inputs": [
                 {
@@ -174,6 +185,70 @@
             "outputs": [],
             "payable": false,
             "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "anonymous": false,
+            "inputs": [
+                {
+                    "indexed": false,
+                    "internalType": "enum Voting.Candidates",
+                    "name": "choice",
+                    "type": "uint8"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "address",
+                    "name": "voter",
+                    "type": "address"
+                }
+            ],
+            "name": "Voted",
+            "type": "event"
+        },
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "balance",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "isOpen",
+            "outputs": [
+                {
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "constant": true,
+            "inputs": [],
+            "name": "showCandidatevotes",
+            "outputs": [
+                {
+                    "internalType": "uint256[]",
+                    "name": "",
+                    "type": "uint256[]"
+                }
+            ],
+            "payable": false,
+            "stateMutability": "view",
             "type": "function"
         },
         {

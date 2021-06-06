@@ -27,7 +27,7 @@ contract Voting {
         string lName;
         uint age;
         uint tokens;
-        VoterStatus status;
+         VoterStatus status;
     }
     /**
      * @dev Map address to Voter
@@ -124,13 +124,14 @@ contract Voting {
      * function for the Voters to buy tokens
      * @return uint
      */
-    function buy(uint256 amt , address reciever) payable public returns(uint){
+    function buy(uint256 amt , address _voter) payable public returns(uint){
         // Voter storage voter = voters[msg.sender];
         uint tokensToBuy = amt/tokenPrice;
         require(tokensToBuy == 1, 'You can only buy 1');
-        voters[msg.sender].tokens = tokensToBuy;
+        require(voters[_voter].status == VoterStatus.verified, 'You are not a registered voter');
+        voters[_voter].tokens = tokensToBuy;
         balances[msg.sender] -= tokensToBuy;
-        balances[reciever] += tokensToBuy;
+        balances[_voter] += tokensToBuy;
         return tokensToBuy;
     }
     function balance() onlyOwner public view returns(uint) { 
@@ -139,16 +140,16 @@ contract Voting {
     /**
      * @dev Define the vote function record the votes
     */
-    function vote(Candidates _candidate) public{
-        Voter storage voter = voters[msg.sender];
-        require (isOpen);
-        require(voter.status == VoterStatus.verified, "You are not Verified");
+    function vote(Candidates _candidate, address _voter) public{
+        // Voter storage voter = voters[msg.sender];
+        require (isOpen, 'Voting is Close');
+        require(voters[_voter].status == VoterStatus.verified, "You are not Verified");
         //Voter must be Verified, only 3 fixed candidate choices
         assert(_candidate == Candidates.ALPHA || _candidate == Candidates.BETA || _candidate == Candidates.THETA);
         uint prevCount = candidateVotes[uint8(_candidate)];
         candidateVotes[uint8(_candidate)] = prevCount + 1 ;
         //Set the status of the voter back to Unverified
-        voter.status = VoterStatus.unverified;
+        voters[_voter].status = VoterStatus.unverified;
     }
     function CloseVoting () onlyOwner public {
         require(isOpen);
@@ -166,5 +167,17 @@ contract Voting {
             }
         }
         return winner;
+    }
+    
+    function showCandidatevotes() onlyOwner public view returns (uint [] memory) { 
+        uint [] memory list = new uint [] (candidateVotes.length);
+        for(uint i=0; i< candidateVotes.length; i++){
+            if(candidateVotes[i] != 0){
+                list[i] = candidateVotes[i];
+                
+            }
+        }
+        
+        return list;
     }
 }

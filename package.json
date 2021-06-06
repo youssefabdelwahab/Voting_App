@@ -4,6 +4,7 @@
   "description": "first pages",
   "main": "index.js",
   "dependencies": {
+    "bootstrap": "^3.4.1",
     "web3": "^1.3.6"
   },
   "devDependencies": {},
